@@ -4,7 +4,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
+import { Platform, useColorScheme } from "react-native";
 import "react-native-reanimated";
 import { TamaguiProvider } from "tamagui";
 
@@ -16,10 +16,12 @@ const queryClient = new QueryClient();
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
-  initialRouteName: "(tabs)/index",
+  initialRouteName: "(tabs)",
 };
 
-SplashScreen.preventAutoHideAsync();
+if (Platform.OS !== "web") {
+  SplashScreen.preventAutoHideAsync();
+}
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -34,7 +36,7 @@ export default function RootLayout() {
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded && Platform.OS !== "web") {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
